@@ -24,3 +24,81 @@ exports.listarTransacoes = async (req, res) => {
         res.status(500).json( { erro: 'Erro ao listar transações'} )
     }
 }
+
+exports.obterValorTotalDeTransacoesDeEntradaDoMesEAnoAtuais = async (req, res) => {
+    try {
+        const tipoDaTransacao = 'Entrada';
+        const resultado = await db.query(`
+            SELECT 
+                SUM(valor) AS valor_total_de_entradas
+            FROM transacao
+            WHERE tipo_da_transacao = $1
+                AND data_da_transacao >= DATE_TRUNC('month', CURRENT_DATE)
+                AND data_da_transacao < (DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month')`,
+            [tipoDaTransacao]
+        );
+
+        res.json({
+            valor_total_de_entradas: resultado.rows[0].valor_total_de_entradas
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json( { erro: 'Erro ao obter valor total de transações de entrada do mês e ano atuais'} )
+    }
+}
+
+exports.obterValorTotalDeTransacoesDeSaidaDoMesEAnoAtuais = async (req, res) => {
+    try {
+        const tipoDaTransacao = 'Saída';
+        const resultado = await db.query(`
+            SELECT 
+                SUM(valor) AS valor_total_de_saidas
+            FROM transacao
+            WHERE tipo_da_transacao = $1
+                AND data_da_transacao >= DATE_TRUNC('month', CURRENT_DATE)
+                AND data_da_transacao < (DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month')`,
+            [tipoDaTransacao]
+        );
+
+        res.json({
+            valor_total_de_saidas: resultado.rows[0].valor_total_de_saidas
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json( { erro: 'Erro ao obter valor total de transações de saída do mês e ano atuais' } )
+    }
+}
+
+exports.obterDataDaTransacaoDeEntradaMaisRecente = async (req, res) => {
+    try {
+        const tipoDaTransacao = 'Entrada'
+        const resultado = await db.query(`
+            SELECT MAX(data_da_transacao) AS data_mais_recente
+            FROM transacao
+            WHERE tipo_da_transacao = $1`,
+            [tipoDaTransacao]
+        )
+
+        res.json( { data_mais_recente: resultado.rows[0].data_mais_recente } )
+    } catch (err) {
+        console.error(err)
+        res.status(500).json( { erro: 'Erro ao obter data da transação de entrada mais recente' } )
+    }
+}
+
+exports.obterDataDaTransacaoDeSaidaMaisRecente = async (req, res) => {
+    try {
+        const tipoDaTransacao = 'Saída'
+        const resultado = await db.query(`
+            SELECT MAX(data_da_transacao) AS data_mais_recente
+            FROM transacao
+            WHERE tipo_da_transacao = $1`,
+            [tipoDaTransacao]
+        )
+
+        res.json( { data_mais_recente: resultado.rows[0].data_mais_recente } )
+    } catch (err) {
+        console.error(err)
+        res.status(500).json( { erro: 'Erro ao obter data da transação de saída mais recente' } )
+    }
+}
