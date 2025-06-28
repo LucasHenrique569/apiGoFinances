@@ -75,7 +75,9 @@ exports.obterDataDaTransacaoDeEntradaMaisRecente = async (req, res) => {
         const resultado = await db.query(`
             SELECT MAX(data_da_transacao) AS data_mais_recente
             FROM transacao
-            WHERE tipo_da_transacao = $1`,
+            WHERE tipo_da_transacao = $1
+                AND data_da_transacao >= DATE_TRUNC('month', CURRENT_DATE)
+                AND data_da_transacao < (DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month')`,
             [tipoDaTransacao]
         )
 
@@ -92,7 +94,9 @@ exports.obterDataDaTransacaoDeSaidaMaisRecente = async (req, res) => {
         const resultado = await db.query(`
             SELECT MAX(data_da_transacao) AS data_mais_recente
             FROM transacao
-            WHERE tipo_da_transacao = $1`,
+            WHERE tipo_da_transacao = $1
+                AND data_da_transacao >= DATE_TRUNC('month', CURRENT_DATE)
+                AND data_da_transacao < (DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month')`,
             [tipoDaTransacao]
         )
 
