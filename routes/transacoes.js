@@ -10,4 +10,6 @@ router.get('/saidas', transacoesController.obterValorTotalDeTransacoesDeSaidaDoM
 router.get('/entradas/data', transacoesController.obterDataDaTransacaoDeEntradaMaisRecente);
 router.get('/saidas/data', transacoesController.obterDataDaTransacaoDeSaidaMaisRecente);
 
+router.get('/resumo', transacoesController.obterTotalDeEntradasPorCategoria);
+
 module.exports = router;

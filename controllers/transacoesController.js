@@ -106,3 +106,25 @@ exports.obterDataDaTransacaoDeSaidaMaisRecente = async (req, res) => {
         res.status(500).json( { erro: 'Erro ao obter data da transação de saída mais recente' } )
     }
 }
+
+exports.obterTotalDeEntradasPorCategoria = async (req, res) => {
+    try {
+        const { mes, ano } = req.query;
+
+        const tipoDaTransacao = 'Entrada'
+        const resultado = await db.query(`
+            SELECT categoria, SUM(valor) as total
+            FROM transacao
+            WHERE tipo_da_transacao = $1
+                AND EXTRACT(MONTH from data_da_transacao) = $2
+                AND EXTRACT(YEAR from data_da_transacao) = $3
+            GROUP BY categoria`,
+            [tipoDaTransacao, mes, ano]
+        )
+
+        res.json(resultado.rows)
+    } catch (err) {
+        console.error(err)
+        res.status(500).json( { erro: 'Erro ao tentar obter resumo por categoria' } )
+    }
+}
