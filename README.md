@@ -24,18 +24,18 @@ A ideia desta API é permitir que usuários cadastrem e visualizem informações
 ## Instalação
 
 1. Clone o repositório:
-git clone https://github.com/LucasHenrique569/apiGoFinances.git
+- git clone https://github.com/LucasHenrique569/apiGoFinances.git
 
 2. Instale as dependências:
-cd apiGoFinances
-npm i
+- cd apiGoFinances
+- npm i
 
 3. Configure as variáveis de ambiente com base no arquivo ".env.example"
 
 4. Crie a tabela no SGBD PostgresSQL usando o arquivo "script_criacao_banco"
 
 5. Inicie o servidor:
-node app.js
+- node app.js
 
 Feito por [Lucas Henrique](https://github.com/LucasHenrique569) ✌
 
